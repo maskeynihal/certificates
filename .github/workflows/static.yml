@@ -1,5 +1,5 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# Generate certificates page and deploy static content to GitHub Pages
+name: Generate and Deploy Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -22,8 +22,41 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Run certificate generator
+        run: node scripts/generate-html.js
+
+      - name: Prettify generated HTML
+        run: npx --yes prettier --write www/index.html
+
+      - name: Commit and push if changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions@users.noreply.github.com"
+
+          git add www/index.html
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: auto-generate certificates page"
+            git push
+          fi
+
   deploy:
+    needs: generate
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -31,13 +64,21 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Minify HTML before upload
+        run: npx --yes html-minifier-terser www/index.html --collapse-whitespace --remove-comments --minify-css true --minify-js true -o www/index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload only www folder
-          path: 'www'
+          path: "www"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

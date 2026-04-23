@@ -10,20 +10,19 @@
 
 "use strict";
 
-const fs   = require("fs");
+const fs = require("fs");
 const path = require("path");
 
 // ── CONFIG ─────────────────────────────────────────────────────────────────
 
 /** Where to look for PDFs (relative to repo root). Checked in order. */
 const PDF_DIRS = [
-  ".",            // repo root (current layout)
+  ".", // repo root (current layout)
   "certificates", // future-proof subfolder
 ];
 
 /** GitHub browse base URL used for the "View" link on every card. */
-const GITHUB_BASE =
-  "https://github.com/maskeynihal/certificates/blob/main/";
+const GITHUB_BASE = "https://github.com/maskeynihal/certificates/blob/main/";
 
 /** Output path (repo root). */
 const OUTPUT = path.join(__dirname, "..", "www", "index.html");
@@ -34,24 +33,32 @@ const RULES = [
   {
     category: "AWS",
     icon: "☁️",
-    test: function(f) { return /^aws/i.test(f); },
+    test: function (f) {
+      return /^aws/i.test(f);
+    },
   },
   {
     category: "Security Awareness",
     icon: "🛡️",
-    test: function(f) {
-      return /hipaa|knowbe4|insider|phishing|phsihing|internet.?sec|travel.?sec|mobile.?dev|captain|jasper|privacy.?law|llm.?sec|ai.?sec|surprise/i.test(f);
+    test: function (f) {
+      return /hipaa|knowbe4|insider|phishing|phsihing|internet.?sec|travel.?sec|mobile.?dev|captain|jasper|privacy.?law|llm.?sec|ai.?sec|surprise/i.test(
+        f,
+      );
     },
   },
   {
     category: "Secure Coding",
     icon: "💻",
-    test: function(f) { return /secure.?cod|secure.?app|owasp/i.test(f); },
+    test: function (f) {
+      return /secure.?cod|secure.?app|owasp/i.test(f);
+    },
   },
   {
     category: "Courses",
     icon: "🎓",
-    test: function() { return true; },
+    test: function () {
+      return true;
+    },
   },
 ];
 
@@ -67,28 +74,28 @@ function categorise(filename) {
 // ── ICON OVERRIDES ─────────────────────────────────────────────────────────
 
 const ICON_OVERRIDES = [
-  [/hipaa|privacy.*law/i,     "🏥"],
-  [/mobile.?device/i,         "📱"],
-  [/travel/i,                 "✈️"],
-  [/jasper/i,                 "🧳"],
-  [/phish/i,                  "🎣"],
-  [/internet.*security/i,     "🌐"],
-  [/insider/i,                "🔍"],
-  [/surprise|snapshot/i,      "🔒"],
-  [/llm|ai.*(fund|sec)/i,     "🤖"],
-  [/safer.*dep/i,             "📦"],
-  [/sensitive.*cred/i,        "🔑"],
-  [/good.*cod/i,              "✅"],
-  [/owasp/i,                  "🔟"],
-  [/data.*hyg/i,              "🧹"],
-  [/memory/i,                 "🧠"],
-  [/source.*code/i,           "🛡️"],
-  [/password/i,               "🔐"],
-  [/datadog.*101|101.*dev/i,  "🐶"],
-  [/observ/i,                 "📈"],
-  [/database/i,               "🗄️"],
-  [/visuali/i,                "📊"],
-  [/hcu/i,                    "🎓"],
+  [/hipaa|privacy.*law/i, "🏥"],
+  [/mobile.?device/i, "📱"],
+  [/travel/i, "✈️"],
+  [/jasper/i, "🧳"],
+  [/phish/i, "🎣"],
+  [/internet.*security/i, "🌐"],
+  [/insider/i, "🔍"],
+  [/surprise|snapshot/i, "🔒"],
+  [/llm|ai.*(fund|sec)/i, "🤖"],
+  [/safer.*dep/i, "📦"],
+  [/sensitive.*cred/i, "🔑"],
+  [/good.*cod/i, "✅"],
+  [/owasp/i, "🔟"],
+  [/data.*hyg/i, "🧹"],
+  [/memory/i, "🧠"],
+  [/source.*code/i, "🛡️"],
+  [/password/i, "🔐"],
+  [/datadog.*101|101.*dev/i, "🐶"],
+  [/observ/i, "📈"],
+  [/database/i, "🗄️"],
+  [/visuali/i, "📊"],
+  [/hcu/i, "🎓"],
 ];
 
 function iconFor(cleanNameStr, defaultIcon) {
@@ -106,9 +113,7 @@ function cleanName(filename) {
     .replace(/ - Nihal Maskey$/i, "")
     .trim();
 
-  n = n
-    .replace(/_/g, " ")
-    .replace(/\s*-\s*/g, ": ");
+  n = n.replace(/_/g, " ").replace(/\s*-\s*/g, ": ");
 
   // Split camelCase (SecureApplicationDevelopment → Secure Application Development)
   n = n.replace(/([a-z])([A-Z])/g, "$1 $2");
@@ -125,36 +130,42 @@ const repoRoot = path.resolve(__dirname, "..");
 
 function collectPdfs() {
   var found = [];
-  var seen  = {};
+  var seen = {};
 
-  PDF_DIRS.forEach(function(dir) {
+  PDF_DIRS.forEach(function (dir) {
     var absDir = path.join(repoRoot, dir);
     if (!fs.existsSync(absDir)) return;
 
     var entries = fs.readdirSync(absDir, { withFileTypes: true });
-    entries.forEach(function(entry) {
+    entries.forEach(function (entry) {
       if (!entry.isFile()) return;
       if (!entry.name.toLowerCase().endsWith(".pdf")) return;
-      var prefix  = dir === "." ? "" : dir + "/";
+      var prefix = dir === "." ? "" : dir + "/";
       var relPath = prefix + entry.name;
-      if (!seen[relPath]) { seen[relPath] = true; found.push(relPath); }
+      if (!seen[relPath]) {
+        seen[relPath] = true;
+        found.push(relPath);
+      }
     });
   });
 
-  found.sort(function(a, b) { return a.localeCompare(b, undefined, { sensitivity: "base" }); });
+  found.sort(function (a, b) {
+    return a.localeCompare(b, undefined, { sensitivity: "base" });
+  });
   return found;
 }
 
 // ── BUILD CERT OBJECTS ─────────────────────────────────────────────────────
 
 function buildCerts(files) {
-  return files.map(function(relPath) {
+  return files.map(function (relPath) {
     var filename = path.basename(relPath);
-    var name     = cleanName(filename);
-    var cat      = categorise(filename);
-    var icon     = iconFor(name, cat.icon);
+    var name = cleanName(filename);
+    var cat = categorise(filename);
+    var icon = iconFor(name, cat.icon);
 
-    var url = GITHUB_BASE + relPath.split("/").map(encodeURIComponent).join("/");
+    var url =
+      GITHUB_BASE + relPath.split("/").map(encodeURIComponent).join("/");
 
     return { name: name, category: cat.category, icon: icon, url: url };
   });
@@ -164,95 +175,83 @@ function buildCerts(files) {
 
 function countByCategory(certs) {
   var map = {};
-  certs.forEach(function(c) {
+  certs.forEach(function (c) {
     map[c.category] = (map[c.category] || 0) + 1;
   });
   return map;
 }
 
-// ── CLIENT-SIDE JS ─────────────────────────────────────────────────────────
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
-function buildClientJs(certs) {
-  return [
-    "// Injected by scripts/generate-certificates.js — do not edit manually",
-    "var CERTS = " + JSON.stringify(certs, null, 2) + ";",
-    "",
-    "function catClass(c) {",
-    "  var m = { AWS: 'aws', 'Security Awareness': 'security', 'Secure Coding': 'coding', Courses: 'courses' };",
-    "  return m[c] || 'courses';",
-    "}",
-    "function tagClass(c) {",
-    "  var m = { AWS: 'tag-aws', 'Security Awareness': 'tag-security', 'Secure Coding': 'tag-coding', Courses: 'tag-courses' };",
-    "  return m[c] || 'tag-courses';",
-    "}",
-    "",
-    "var currentFilter = 'all';",
-    "var currentQuery  = '';",
-    "",
-    "function buildCard(cert, delay) {",
-    "  var a = document.createElement('a');",
-    "  a.className = 'cert-card';",
-    "  a.href = cert.url;",
-    "  a.target = '_blank';",
-    "  a.rel = 'noopener noreferrer';",
-    "  a.dataset.category = cert.category;",
-    "  a.style.animationDelay = delay + 'ms';",
-    "  a.innerHTML =",
-    "    '<div class=\"cert-card-top\">' +",
-    "      '<div class=\"cert-icon ' + catClass(cert.category) + '\">' + cert.icon + '</div>' +",
-    "      '<svg class=\"cert-link-icon\" width=\"16\" height=\"16\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"2\">' +",
-    "        '<path d=\"M7 17L17 7M7 7h10v10\"/>' +",
-    "      '</svg>' +",
-    "    '</div>' +",
-    "    '<div class=\"cert-name\">' + cert.name + '</div>' +",
-    "    '<span class=\"cert-tag ' + tagClass(cert.category) + '\">' + cert.category + '</span>';",
-    "  return a;",
-    "}",
-    "",
-    "function render() {",
-    "  var grid  = document.getElementById('certGrid');",
-    "  var shown = 0;",
-    "  grid.innerHTML = '';",
-    "  CERTS.forEach(function(c) {",
-    "    var matchCat = currentFilter === 'all' || c.category === currentFilter;",
-    "    var matchQ   = !currentQuery || c.name.toLowerCase().indexOf(currentQuery.toLowerCase()) !== -1;",
-    "    if (matchCat && matchQ) { grid.appendChild(buildCard(c, shown * 40)); shown++; }",
-    "  });",
-    "  if (shown === 0) {",
-    "    grid.innerHTML =",
-    "      '<div class=\"empty\">' +",
-    "        '<svg fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\" stroke-width=\"1.5\">' +",
-    "          '<path d=\"M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z\"/>' +",
-    "        '</svg>' +",
-    "        '<p>No certificates found.</p>' +",
-    "      '</div>';",
-    "  }",
-    "}",
-    "",
-    "document.getElementById('filterBar').addEventListener('click', function(e) {",
-    "  var btn = e.target.closest('.filter-btn');",
-    "  if (!btn) return;",
-    "  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });",
-    "  btn.classList.add('active');",
-    "  currentFilter = btn.dataset.filter;",
-    "  render();",
-    "});",
-    "",
-    "document.getElementById('searchInput').addEventListener('input', function(e) {",
-    "  currentQuery = e.target.value;",
-    "  render();",
-    "});",
-    "",
-    "var htmlEl = document.documentElement;",
-    "htmlEl.setAttribute('data-theme', localStorage.getItem('nm-theme') || 'dark');",
-    "document.getElementById('themeToggle').addEventListener('click', function() {",
-    "  var next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';",
-    "  htmlEl.setAttribute('data-theme', next);",
-    "  localStorage.setItem('nm-theme', next);",
-    "});",
-    "",
-    "render();",
-  ].join("\n");
+function catClass(c) {
+  var m = {
+    AWS: "aws",
+    "Security Awareness": "security",
+    "Secure Coding": "coding",
+    Courses: "courses",
+  };
+  return m[c] || "courses";
+}
+
+function tagClass(c) {
+  var m = {
+    AWS: "tag-aws",
+    "Security Awareness": "tag-security",
+    "Secure Coding": "tag-coding",
+    Courses: "tag-courses",
+  };
+  return m[c] || "tag-courses";
+}
+
+function buildCardsHtml(certs) {
+  if (certs.length === 0) {
+    return [
+      '<div class="empty">',
+      '  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">',
+      '    <path d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+      "  </svg>",
+      "  <p>No certificates found.</p>",
+      "</div>",
+    ].join("\n");
+  }
+
+  return certs
+    .map(function (cert, index) {
+      return [
+        '<a class="cert-card" href="' +
+          escapeHtml(cert.url) +
+          '" target="_blank" rel="noopener noreferrer" data-category="' +
+          escapeHtml(cert.category) +
+          '" style="animation-delay: ' +
+          index * 40 +
+          'ms;">',
+        '  <div class="cert-card-top">',
+        '    <div class="cert-icon ' +
+          catClass(cert.category) +
+          '">' +
+          escapeHtml(cert.icon) +
+          "</div>",
+        '    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">',
+        '      <path d="M7 17L17 7M7 7h10v10"/>',
+        "    </svg>",
+        "  </div>",
+        '  <div class="cert-name">' + escapeHtml(cert.name) + "</div>",
+        '  <span class="cert-tag ' +
+          tagClass(cert.category) +
+          '">' +
+          escapeHtml(cert.category) +
+          "</span>",
+        "</a>",
+      ].join("\n");
+    })
+    .join("\n");
 }
 
 // ── CSS ────────────────────────────────────────────────────────────────────
@@ -400,35 +399,57 @@ const CSS = [
 // ── HTML ASSEMBLY ──────────────────────────────────────────────────────────
 
 function generateHtml(certs) {
-  var total       = certs.length;
-  var byCategory  = countByCategory(certs);
-  var year        = new Date().getFullYear();
+  var total = certs.length;
+  var byCategory = countByCategory(certs);
+  var year = new Date().getFullYear();
+  var cardsHtml = buildCardsHtml(certs);
 
-  var catList   = ["AWS", "Security Awareness", "Secure Coding", "Courses"];
-  var catEmoji  = { AWS: "&#x2601;&#xFE0F;", "Security Awareness": "&#x1F6E1;&#xFE0F;", "Secure Coding": "&#x1F4BB;", Courses: "&#x1F393;" };
+  var catList = ["AWS", "Security Awareness", "Secure Coding", "Courses"];
+  var catEmoji = {
+    AWS: "&#x2601;&#xFE0F;",
+    "Security Awareness": "&#x1F6E1;&#xFE0F;",
+    "Secure Coding": "&#x1F4BB;",
+    Courses: "&#x1F393;",
+  };
 
   // Filter buttons
   var filterBtns = catList
-    .filter(function(c) { return byCategory[c]; })
-    .map(function(c) {
-      return '        <button class="filter-btn" data-filter="' + c + '">' +
-        catEmoji[c] + " " + c +
-        ' <span class="count">' + byCategory[c] + "</span></button>";
+    .filter(function (c) {
+      return byCategory[c];
+    })
+    .map(function (c) {
+      return (
+        '        <button class="filter-btn" data-filter="' +
+        c +
+        '">' +
+        catEmoji[c] +
+        " " +
+        c +
+        ' <span class="count">' +
+        byCategory[c] +
+        "</span></button>"
+      );
     })
     .join("\n");
 
   // Stats
   var statsRows = [
-    '<div class="stat"><div class="stat-num">' + total + "</div><div class=\"stat-label\">Total</div></div>",
+    '<div class="stat"><div class="stat-num">' +
+      total +
+      '</div><div class="stat-label">Total</div></div>',
     '<div class="stat-divider"></div>',
-    '<div class="stat"><div class="stat-num">' + (byCategory["AWS"] || 0) + "<span>+</span></div><div class=\"stat-label\">AWS</div></div>",
+    '<div class="stat"><div class="stat-num">' +
+      (byCategory["AWS"] || 0) +
+      '<span>+</span></div><div class="stat-label">AWS</div></div>',
     '<div class="stat-divider"></div>',
-    '<div class="stat"><div class="stat-num">' + (byCategory["Secure Coding"] || 0) + "<span>+</span></div><div class=\"stat-label\">Secure Coding</div></div>",
+    '<div class="stat"><div class="stat-num">' +
+      (byCategory["Secure Coding"] || 0) +
+      '<span>+</span></div><div class="stat-label">Secure Coding</div></div>',
     '<div class="stat-divider"></div>',
-    '<div class="stat"><div class="stat-num">' + Object.keys(byCategory).length + "<span>+</span></div><div class=\"stat-label\">Categories</div></div>",
+    '<div class="stat"><div class="stat-num">' +
+      Object.keys(byCategory).length +
+      '<span>+</span></div><div class="stat-label">Categories</div></div>',
   ].join("\n        ");
-
-  var clientJs = buildClientJs(certs);
 
   return [
     "<!DOCTYPE html>",
@@ -437,7 +458,6 @@ function generateHtml(certs) {
     '  <meta charset="UTF-8" />',
     '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />',
     "  <title>Nihal Maskey \u2014 Certificates</title>",
-    "  <!-- Auto-generated by scripts/generate-certificates.js \u2014 do not edit manually -->",
     '  <link rel="preconnect" href="https://fonts.googleapis.com" />',
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />',
     '  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />',
@@ -456,18 +476,6 @@ function generateHtml(certs) {
     '        <li><a href="#" class="active">Certificates</a></li>',
     '        <li><a href="https://nihal.com.np/#blog">Blog</a></li>',
     "      </ul>",
-    '      <button class="theme-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">',
-    '        <svg class="icon-sun" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">',
-    '          <circle cx="12" cy="12" r="5"/>',
-    '          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>',
-    '          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>',
-    '          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>',
-    '          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
-    "        </svg>",
-    '        <svg class="icon-moon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">',
-    '          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
-    "        </svg>",
-    "      </button>",
     "    </nav>",
     "  </header>",
     "",
@@ -482,28 +490,24 @@ function generateHtml(certs) {
     "    </section>",
     "",
     '    <div class="controls">',
-    '      <div class="search-wrap">',
-    '        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">',
-    '          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
-    "        </svg>",
-    '        <input type="text" id="searchInput" class="search-input" placeholder="Search certificates\u2026" />',
-    "      </div>",
-    '      <div class="filter-bar" id="filterBar">',
-    '        <button class="filter-btn active" data-filter="all">All <span class="count">' + total + "</span></button>",
+    '      <div class="filter-bar">',
+    '        <button class="filter-btn active" type="button">All <span class="count">' +
+      total +
+      "</span></button>",
     filterBtns,
     "      </div>",
     "    </div>",
     "",
-    '    <div class="cert-grid" id="certGrid"></div>',
+    '    <div class="cert-grid">',
+    cardsHtml,
+    "    </div>",
     "  </main>",
     "",
     "  <footer>",
-    "    <p>\u00A9 " + year + ' <a href="https://nihal.com.np/">Nihal Maskey</a> \u00B7 All rights reserved</p>',
+    "    <p>\u00A9 " +
+      year +
+      ' <a href="https://nihal.com.np/">Nihal Maskey</a> \u00B7 All rights reserved</p>',
     "  </footer>",
-    "",
-    "  <script>",
-    clientJs,
-    "  </script>",
     "</body>",
     "</html>",
   ].join("\n");
@@ -519,14 +523,20 @@ function main() {
     process.exit(1);
   }
 
-  console.log("[generate-certificates] Found " + files.length + " certificate(s):");
-  files.forEach(function(f) { console.log("  - " + f); });
+  console.log(
+    "[generate-certificates] Found " + files.length + " certificate(s):",
+  );
+  files.forEach(function (f) {
+    console.log("  - " + f);
+  });
 
   var certs = buildCerts(files);
-  var html  = generateHtml(certs);
+  var html = generateHtml(certs);
 
   fs.writeFileSync(OUTPUT, html, "utf8");
-  console.log("[generate-certificates] Written -> " + path.relative(repoRoot, OUTPUT));
+  console.log(
+    "[generate-certificates] Written -> " + path.relative(repoRoot, OUTPUT),
+  );
 }
 
 main();
