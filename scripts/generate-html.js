@@ -23,7 +23,7 @@ const PDF_DIRS = [
 
 /** GitHub browse base URL used for the "View" link on every card. */
 const GITHUB_BASE =
-  "https://github.com/maskeynihal/certificates/blob/main/certificates";
+  "https://github.com/maskeynihal/certificates/blob/main/";
 
 /** Output path (repo root). */
 const OUTPUT = path.join(__dirname, "..", "www", "index.html");
