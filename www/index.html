@@ -1,518 +1,1441 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nihal Maskey — Certificates</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
-  <style>:root {
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --radius: 12px; --radius-sm: 8px;
-  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-[data-theme='dark'] {
-  --bg: #080d18; --bg-card: #111827;
-  --border: #1e2d4a; --border-soft: #162038;
-  --text: #e2e8f6; --text-muted: #7a8aaa; --text-faint: #3d4f70;
-  --accent: #5eead4; --accent-dim: rgba(94,234,212,0.12); --accent-glow: rgba(94,234,212,0.06);
-  --tag-aws: rgba(255,153,0,0.15);    --tag-aws-text: #ffb347;
-  --tag-sec: rgba(239,68,68,0.12);    --tag-sec-text: #f87171;
-  --tag-code: rgba(99,102,241,0.15);  --tag-code-text: #a5b4fc;
-  --tag-course: rgba(34,197,94,0.12); --tag-course-text: #4ade80;
-  --shadow: 0 4px 24px rgba(0,0,0,0.5); --shadow-card: 0 2px 12px rgba(0,0,0,0.4);
-  --nm-bg: var(--accent); --nm-text: #080d18;
-}
-[data-theme='light'] {
-  --bg: #f5f7fb; --bg-card: #ffffff;
-  --border: #e1e8f5; --border-soft: #edf1fa;
-  --text: #0f172a; --text-muted: #64748b; --text-faint: #cbd5e1;
-  --accent: #0d9488; --accent-dim: rgba(13,148,136,0.08); --accent-glow: rgba(13,148,136,0.04);
-  --tag-aws: rgba(217,119,6,0.1);    --tag-aws-text: #b45309;
-  --tag-sec: rgba(220,38,38,0.1);    --tag-sec-text: #dc2626;
-  --tag-code: rgba(79,70,229,0.1);   --tag-code-text: #4f46e5;
-  --tag-course: rgba(22,163,74,0.1); --tag-course-text: #16a34a;
-  --shadow: 0 4px 24px rgba(15,23,42,0.08); --shadow-card: 0 2px 12px rgba(15,23,42,0.06);
-  --nm-bg: var(--accent); --nm-text: #ffffff;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh;
-  transition: background var(--transition), color var(--transition); -webkit-font-smoothing: antialiased; }
-body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px; }
-header { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border-soft);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transition: background var(--transition); }
-nav { max-width: 1100px; margin: 0 auto; padding: 0 2rem; height: 64px; display: flex;
-  align-items: center; justify-content: space-between; gap: 2rem; }
-.nm-logo { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px;
-  border-radius: 8px; background: var(--nm-bg); color: var(--nm-text); font-family: var(--font-display);
-  font-weight: 700; font-size: 0.8rem; letter-spacing: 0.02em; text-decoration: none;
-  flex-shrink: 0; transition: opacity 0.2s; }
-.nm-logo:hover { opacity: 0.85; }
-.nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
-.nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; font-weight: 400;
-  padding: 0.4rem 0.8rem; border-radius: 6px; transition: color var(--transition), background var(--transition); }
-.nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--accent-dim); }
-.nav-links a.active { color: var(--accent); font-weight: 500; }
-.theme-btn { cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--text-muted);
-  width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-  transition: all var(--transition); flex-shrink: 0; }
-.theme-btn:hover { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
-.theme-btn svg { width: 16px; height: 16px; }
-.icon-sun, .icon-moon { display: none; }
-[data-theme='dark']  .icon-sun  { display: block; }
-[data-theme='light'] .icon-moon { display: block; }
-main { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 4rem 2rem 6rem; }
-.hero { margin-bottom: 3.5rem; animation: fadeUp 0.6s ease both; }
-.hero-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; font-weight: 500;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
-.hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1.5px; background: var(--accent); }
-.hero h1 { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 700;
-  line-height: 1.1; letter-spacing: -0.03em; color: var(--text); margin-bottom: 1rem; }
-.hero h1 span { color: var(--accent); }
-.hero p { font-size: 1rem; line-height: 1.7; color: var(--text-muted); max-width: 520px; }
-.stats { display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.1s ease both; }
-.stat { display: flex; flex-direction: column; gap: 0.15rem; }
-.stat-num { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--text);
-  line-height: 1; letter-spacing: -0.04em; }
-.stat-num span { color: var(--accent); font-size: 1.1rem; }
-.stat-label { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.05em; text-transform: uppercase; }
-.stat-divider { width: 1px; background: var(--border); align-self: stretch; margin: 0.25rem 0; }
-.controls { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2.5rem; }
-.search-wrap { position: relative; animation: fadeUp 0.6s 0.12s ease both; }
-.search-wrap svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
-  color: var(--text-faint); width: 16px; height: 16px; pointer-events: none; }
-.search-input { width: 100%; max-width: 420px; background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 100px; color: var(--text); font-family: var(--font-body); font-size: 0.875rem;
-  padding: 0.6rem 1rem 0.6rem 2.6rem; outline: none; transition: all var(--transition); }
-.search-input::placeholder { color: var(--text-faint); }
-.search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
-.filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.15s ease both; }
-.filter-btn { cursor: pointer; border: 1px solid var(--border); background: transparent;
-  color: var(--text-muted); font-family: var(--font-body); font-size: 0.83rem; font-weight: 400;
-  padding: 0.45rem 1rem; border-radius: 100px; transition: all var(--transition);
-  display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
-.filter-btn .count { font-size: 0.72rem; background: var(--border); color: var(--text-faint);
-  padding: 0.1rem 0.45rem; border-radius: 100px; transition: all var(--transition); }
-.filter-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-.filter-btn:hover .count { background: var(--accent-dim); color: var(--accent); }
-.filter-btn.active { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); font-weight: 500; }
-.filter-btn.active .count { background: var(--accent); color: var(--bg); }
-.cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
-.cert-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 1.4rem 1.6rem; display: flex; flex-direction: column; gap: 0.85rem;
-  transition: all var(--transition); cursor: pointer; text-decoration: none; color: inherit;
-  position: relative; overflow: hidden; animation: fadeUp 0.5s ease both; box-shadow: var(--shadow-card); }
-.cert-card::before { content: ''; position: absolute; inset: 0; background: var(--accent-glow);
-  opacity: 0; transition: opacity var(--transition); }
-.cert-card:hover { border-color: var(--accent); transform: translateY(-3px);
-  box-shadow: var(--shadow), 0 0 0 1px var(--accent); }
-.cert-card:hover::before { opacity: 1; }
-.cert-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
-.cert-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex;
-  align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem; }
-.cert-icon.aws      { background: var(--tag-aws); }
-.cert-icon.security { background: var(--tag-sec); }
-.cert-icon.coding   { background: var(--tag-code); }
-.cert-icon.courses  { background: var(--tag-course); }
-.cert-link-icon { color: var(--text-faint); flex-shrink: 0;
-  transition: color var(--transition), transform var(--transition); }
-.cert-card:hover .cert-link-icon { color: var(--accent); transform: translate(2px, -2px); }
-.cert-name { font-family: var(--font-display); font-size: 0.97rem; font-weight: 600;
-  line-height: 1.4; color: var(--text); letter-spacing: -0.015em; flex: 1; }
-.cert-tag { display: inline-flex; align-items: center; font-size: 0.72rem; font-weight: 500;
-  letter-spacing: 0.04em; padding: 0.25rem 0.65rem; border-radius: 100px; width: fit-content; }
-.tag-aws      { background: var(--tag-aws);    color: var(--tag-aws-text); }
-.tag-security { background: var(--tag-sec);    color: var(--tag-sec-text); }
-.tag-coding   { background: var(--tag-code);   color: var(--tag-code-text); }
-.tag-courses  { background: var(--tag-course); color: var(--tag-course-text); }
-.empty { text-align: center; padding: 5rem 2rem; color: var(--text-muted); grid-column: 1 / -1; }
-.empty svg { width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.3; }
-.empty p { font-size: 0.95rem; }
-footer { position: relative; z-index: 1; border-top: 1px solid var(--border-soft);
-  padding: 2rem; text-align: center; }
-footer p { font-size: 0.82rem; color: var(--text-faint); }
-footer a { color: var(--text-muted); text-decoration: none; }
-footer a:hover { color: var(--accent); }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 640px) {
-  nav { padding: 0 1.25rem; } .nav-links { display: none; }
-  main { padding: 2.5rem 1.25rem 4rem; }
-  .cert-grid { grid-template-columns: 1fr; } .stats { gap: 1rem; }
-}  </style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nihal Maskey — Certificates</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --font-display: "Bricolage Grotesque", sans-serif;
+        --font-body: "DM Sans", sans-serif;
+        --radius: 12px;
+        --radius-sm: 8px;
+        --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      [data-theme="dark"] {
+        --bg: #080d18;
+        --bg-card: #111827;
+        --border: #1e2d4a;
+        --border-soft: #162038;
+        --text: #e2e8f6;
+        --text-muted: #7a8aaa;
+        --text-faint: #3d4f70;
+        --accent: #5eead4;
+        --accent-dim: rgba(94, 234, 212, 0.12);
+        --accent-glow: rgba(94, 234, 212, 0.06);
+        --tag-aws: rgba(255, 153, 0, 0.15);
+        --tag-aws-text: #ffb347;
+        --tag-sec: rgba(239, 68, 68, 0.12);
+        --tag-sec-text: #f87171;
+        --tag-code: rgba(99, 102, 241, 0.15);
+        --tag-code-text: #a5b4fc;
+        --tag-course: rgba(34, 197, 94, 0.12);
+        --tag-course-text: #4ade80;
+        --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+        --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.4);
+        --nm-bg: var(--accent);
+        --nm-text: #080d18;
+      }
+      [data-theme="light"] {
+        --bg: #f5f7fb;
+        --bg-card: #ffffff;
+        --border: #e1e8f5;
+        --border-soft: #edf1fa;
+        --text: #0f172a;
+        --text-muted: #64748b;
+        --text-faint: #cbd5e1;
+        --accent: #0d9488;
+        --accent-dim: rgba(13, 148, 136, 0.08);
+        --accent-glow: rgba(13, 148, 136, 0.04);
+        --tag-aws: rgba(217, 119, 6, 0.1);
+        --tag-aws-text: #b45309;
+        --tag-sec: rgba(220, 38, 38, 0.1);
+        --tag-sec-text: #dc2626;
+        --tag-code: rgba(79, 70, 229, 0.1);
+        --tag-code-text: #4f46e5;
+        --tag-course: rgba(22, 163, 74, 0.1);
+        --tag-course-text: #16a34a;
+        --shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+        --shadow-card: 0 2px 12px rgba(15, 23, 42, 0.06);
+        --nm-bg: var(--accent);
+        --nm-text: #ffffff;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: var(--font-body);
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        transition:
+          background var(--transition),
+          color var(--transition);
+        -webkit-font-smoothing: antialiased;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.025;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 200px;
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border-soft);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: background var(--transition);
+      }
+      nav {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+      }
+      .nm-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: var(--nm-bg);
+        color: var(--nm-text);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.02em;
+        text-decoration: none;
+        flex-shrink: 0;
+        transition: opacity 0.2s;
+      }
+      .nm-logo:hover {
+        opacity: 0.85;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 400;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        transition:
+          color var(--transition),
+          background var(--transition);
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--text);
+        background: var(--accent-dim);
+      }
+      .nav-links a.active {
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .theme-btn {
+        cursor: pointer;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text-muted);
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--transition);
+        flex-shrink: 0;
+      }
+      .theme-btn:hover {
+        background: var(--accent-dim);
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      .theme-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .icon-sun,
+      .icon-moon {
+        display: none;
+      }
+      [data-theme="dark"] .icon-sun {
+        display: block;
+      }
+      [data-theme="light"] .icon-moon {
+        display: block;
+      }
+      main {
+        position: relative;
+        z-index: 1;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 4rem 2rem 6rem;
+      }
+      .hero {
+        margin-bottom: 3.5rem;
+        animation: fadeUp 0.6s ease both;
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 1rem;
+      }
+      .hero-eyebrow::before {
+        content: "";
+        display: block;
+        width: 24px;
+        height: 1.5px;
+        background: var(--accent);
+      }
+      .hero h1 {
+        font-family: var(--font-display);
+        font-size: clamp(2.2rem, 5vw, 3.5rem);
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        margin-bottom: 1rem;
+      }
+      .hero h1 span {
+        color: var(--accent);
+      }
+      .hero p {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--text-muted);
+        max-width: 520px;
+      }
+      .stats {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+        animation: fadeUp 0.6s 0.1s ease both;
+      }
+      .stat {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+      }
+      .stat-num {
+        font-family: var(--font-display);
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+      .stat-num span {
+        color: var(--accent);
+        font-size: 1.1rem;
+      }
+      .stat-label {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .stat-divider {
+        width: 1px;
+        background: var(--border);
+        align-self: stretch;
+        margin: 0.25rem 0;
+      }
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 2.5rem;
+      }
+      .search-wrap {
+        position: relative;
+        animation: fadeUp 0.6s 0.12s ease both;
+      }
+      .search-wrap svg {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-faint);
+        width: 16px;
+        height: 16px;
+        pointer-events: none;
+      }
+      .search-input {
+        width: 100%;
+        max-width: 420px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 0.875rem;
+        padding: 0.6rem 1rem 0.6rem 2.6rem;
+        outline: none;
+        transition: all var(--transition);
+      }
+      .search-input::placeholder {
+        color: var(--text-faint);
+      }
+      .search-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-dim);
+      }
+      .filter-bar {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        animation: fadeUp 0.6s 0.15s ease both;
+      }
+      .filter-btn {
+        cursor: pointer;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text-muted);
+        font-family: var(--font-body);
+        font-size: 0.83rem;
+        font-weight: 400;
+        padding: 0.45rem 1rem;
+        border-radius: 100px;
+        transition: all var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        white-space: nowrap;
+      }
+      .filter-btn .count {
+        font-size: 0.72rem;
+        background: var(--border);
+        color: var(--text-faint);
+        padding: 0.1rem 0.45rem;
+        border-radius: 100px;
+        transition: all var(--transition);
+      }
+      .filter-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-dim);
+      }
+      .filter-btn:hover .count {
+        background: var(--accent-dim);
+        color: var(--accent);
+      }
+      .filter-btn.active {
+        border-color: var(--accent);
+        background: var(--accent-dim);
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .filter-btn.active .count {
+        background: var(--accent);
+        color: var(--bg);
+      }
+      .cert-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1rem;
+      }
+      .cert-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.4rem 1.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        transition: all var(--transition);
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        position: relative;
+        overflow: hidden;
+        animation: fadeUp 0.5s ease both;
+        box-shadow: var(--shadow-card);
+      }
+      .cert-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--accent-glow);
+        opacity: 0;
+        transition: opacity var(--transition);
+      }
+      .cert-card:hover {
+        border-color: var(--accent);
+        transform: translateY(-3px);
+        box-shadow:
+          var(--shadow),
+          0 0 0 1px var(--accent);
+      }
+      .cert-card:hover::before {
+        opacity: 1;
+      }
+      .cert-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+      .cert-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 1.1rem;
+      }
+      .cert-icon.aws {
+        background: var(--tag-aws);
+      }
+      .cert-icon.security {
+        background: var(--tag-sec);
+      }
+      .cert-icon.coding {
+        background: var(--tag-code);
+      }
+      .cert-icon.courses {
+        background: var(--tag-course);
+      }
+      .cert-link-icon {
+        color: var(--text-faint);
+        flex-shrink: 0;
+        transition:
+          color var(--transition),
+          transform var(--transition);
+      }
+      .cert-card:hover .cert-link-icon {
+        color: var(--accent);
+        transform: translate(2px, -2px);
+      }
+      .cert-name {
+        font-family: var(--font-display);
+        font-size: 0.97rem;
+        font-weight: 600;
+        line-height: 1.4;
+        color: var(--text);
+        letter-spacing: -0.015em;
+        flex: 1;
+      }
+      .cert-tag {
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        padding: 0.25rem 0.65rem;
+        border-radius: 100px;
+        width: fit-content;
+      }
+      .tag-aws {
+        background: var(--tag-aws);
+        color: var(--tag-aws-text);
+      }
+      .tag-security {
+        background: var(--tag-sec);
+        color: var(--tag-sec-text);
+      }
+      .tag-coding {
+        background: var(--tag-code);
+        color: var(--tag-code-text);
+      }
+      .tag-courses {
+        background: var(--tag-course);
+        color: var(--tag-course-text);
+      }
+      .empty {
+        text-align: center;
+        padding: 5rem 2rem;
+        color: var(--text-muted);
+        grid-column: 1 / -1;
+      }
+      .empty svg {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+      .empty p {
+        font-size: 0.95rem;
+      }
+      footer {
+        position: relative;
+        z-index: 1;
+        border-top: 1px solid var(--border-soft);
+        padding: 2rem;
+        text-align: center;
+      }
+      footer p {
+        font-size: 0.82rem;
+        color: var(--text-faint);
+      }
+      footer a {
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+      footer a:hover {
+        color: var(--accent);
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @media (max-width: 640px) {
+        nav {
+          padding: 0 1.25rem;
+        }
+        .nav-links {
+          display: none;
+        }
+        main {
+          padding: 2.5rem 1.25rem 4rem;
+        }
+        .cert-grid {
+          grid-template-columns: 1fr;
+        }
+        .stats {
+          gap: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="https://nihal.com.np/" class="nm-logo" title="nihal.com.np"
+          >NM</a
+        >
+        <ul class="nav-links">
+          <li><a href="https://nihal.com.np/#about">About</a></li>
+          <li><a href="https://nihal.com.np/#experience">Experience</a></li>
+          <li><a href="https://nihal.com.np/#projects">Projects</a></li>
+          <li><a href="https://nihal.com.np/#education">Education</a></li>
+          <li><a href="#" class="active">Certificates</a></li>
+          <li><a href="https://nihal.com.np/#blog">Blog</a></li>
+        </ul>
+      </nav>
+    </header>
 
-  <header>
-    <nav>
-      <a href="https://nihal.com.np/" class="nm-logo" title="nihal.com.np">NM</a>
-      <ul class="nav-links">
-        <li><a href="https://nihal.com.np/#about">About</a></li>
-        <li><a href="https://nihal.com.np/#experience">Experience</a></li>
-        <li><a href="https://nihal.com.np/#projects">Projects</a></li>
-        <li><a href="https://nihal.com.np/#education">Education</a></li>
-        <li><a href="#" class="active">Certificates</a></li>
-        <li><a href="https://nihal.com.np/#blog">Blog</a></li>
-      </ul>
-    </nav>
-  </header>
+    <main>
+      <section class="hero">
+        <div class="hero-eyebrow">Nihal Maskey</div>
+        <h1>Certificates &amp;<br /><span>Credentials</span></h1>
+        <p>
+          A collection of professional certifications in cloud computing,
+          security, and software engineering.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-num">32</div>
+            <div class="stat-label">Total</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <div class="stat-num">4<span>+</span></div>
+            <div class="stat-label">AWS</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <div class="stat-num">9<span>+</span></div>
+            <div class="stat-label">Secure Coding</div>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <div class="stat-num">4<span>+</span></div>
+            <div class="stat-label">Categories</div>
+          </div>
+        </div>
+      </section>
 
-  <main>
-    <section class="hero">
-      <div class="hero-eyebrow">Nihal Maskey</div>
-      <h1>Certificates &amp;<br/><span>Credentials</span></h1>
-      <p>A collection of professional certifications in cloud computing, security, and software engineering.</p>
-      <div class="stats">
-        <div class="stat"><div class="stat-num">32</div><div class="stat-label">Total</div></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><div class="stat-num">4<span>+</span></div><div class="stat-label">AWS</div></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><div class="stat-num">9<span>+</span></div><div class="stat-label">Secure Coding</div></div>
-        <div class="stat-divider"></div>
-        <div class="stat"><div class="stat-num">4<span>+</span></div><div class="stat-label">Categories</div></div>
+      <div class="controls">
+        <div class="filter-bar">
+          <button class="filter-btn active" type="button">
+            All <span class="count">32</span>
+          </button>
+          <button class="filter-btn" data-filter="AWS">
+            &#x2601;&#xFE0F; AWS <span class="count">4</span>
+          </button>
+          <button class="filter-btn" data-filter="Security Awareness">
+            &#x1F6E1;&#xFE0F; Security Awareness <span class="count">12</span>
+          </button>
+          <button class="filter-btn" data-filter="Secure Coding">
+            &#x1F4BB; Secure Coding <span class="count">9</span>
+          </button>
+          <button class="filter-btn" data-filter="Courses">
+            &#x1F393; Courses <span class="count">7</span>
+          </button>
+        </div>
       </div>
-    </section>
 
-    <div class="controls">
-      <div class="filter-bar">
-        <button class="filter-btn active" type="button">All <span class="count">32</span></button>
-        <button class="filter-btn" data-filter="AWS">&#x2601;&#xFE0F; AWS <span class="count">4</span></button>
-        <button class="filter-btn" data-filter="Security Awareness">&#x1F6E1;&#xFE0F; Security Awareness <span class="count">12</span></button>
-        <button class="filter-btn" data-filter="Secure Coding">&#x1F4BB; Secure Coding <span class="count">9</span></button>
-        <button class="filter-btn" data-filter="Courses">&#x1F393; Courses <span class="count">7</span></button>
+      <div class="cert-grid">
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/2026%20KnowBe4%20Security%20Awareness%20Training.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 0ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">🛡️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">2026 Know Be4 Security Awareness Training</div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/AI%20Fundamentals%20-%20Coursera.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Courses"
+          style="animation-delay: 40ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon courses">🤖</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">AI Fundamentals: Coursera</div>
+          <span class="cert-tag tag-courses">Courses</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/AWS%20Partner%20Generative%20AI%20Essentials.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="AWS"
+          style="animation-delay: 80ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon aws">☁️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">AWS Partner Generative AI Essentials</div>
+          <span class="cert-tag tag-aws">AWS</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/AWS%20Partner%20Generative%20AI%20Sales.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="AWS"
+          style="animation-delay: 120ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon aws">☁️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">AWS Partner Generative AI Sales</div>
+          <span class="cert-tag tag-aws">AWS</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/AWS%20Partner%20Sales%20Accrediation.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="AWS"
+          style="animation-delay: 160ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon aws">☁️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">AWS Partner Sales Accrediation</div>
+          <span class="cert-tag tag-aws">AWS</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/AWS%20SimuLearn-%20Cloud%20Computing%20Essentials.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="AWS"
+          style="animation-delay: 200ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon aws">☁️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">
+            AWS Simu Learn: Cloud Computing Essentials
+          </div>
+          <span class="cert-tag tag-aws">AWS</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/CaptainAwarenessSecuringYourMobileDevices.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 240ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">📱</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">
+            Captain Awareness Securing Your Mobile Devices
+          </div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/CaptainAwarenessTravelSecurely.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 280ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">✈️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Captain Awareness Travel Securely</div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Datadog_101_Developer.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Courses"
+          style="animation-delay: 320ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon courses">🐶</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Datadog 101 Developer</div>
+          <span class="cert-tag tag-courses">Courses</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/DataVisualization.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Courses"
+          style="animation-delay: 360ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon courses">📊</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Data Visualization</div>
+          <span class="cert-tag tag-courses">Courses</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/FundamentalsOfDatabaseEngineering.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Courses"
+          style="animation-delay: 400ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon courses">🗄️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Fundamentals Of Database Engineering</div>
+          <span class="cert-tag tag-courses">Courses</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Generative%20AI%20for%20Executives.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Courses"
+          style="animation-delay: 440ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon courses">🎓</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Generative AI for Executives</div>
+          <span class="cert-tag tag-courses">Courses</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/HCU_Certificate.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Courses"
+          style="animation-delay: 480ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon courses">🎓</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">HCU Certificate</div>
+          <span class="cert-tag tag-courses">Courses</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/HIPAA_Course_Certificate_NIHAL.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 520ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">🏥</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">HIPAA Course Certificate NIHAL</div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/HIPAABusinessAssociates.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 560ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">🏥</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">HIPAABusiness Associates</div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/InsiderThreat.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 600ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">🔍</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Insider Threat</div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/InternetSecurityAndYou.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 640ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">🌐</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Internet Security And You</div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Introduction%20to%20AI_LLM%20Security.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 680ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">🤖</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Introduction to AI LLM Security</div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Introduction_to_Observability_Datadog.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Courses"
+          style="animation-delay: 720ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon courses">📈</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Introduction to Observability Datadog</div>
+          <span class="cert-tag tag-courses">Courses</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/JasperTheDisasterInTravelSecurityAwareness.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 760ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">✈️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">
+            Jasper The Disaster In Travel Security Awareness
+          </div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/PhsihingScams.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 800ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">🛡️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Phsihing Scams</div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Privacy%20Law%20and%20HIPAA%20-%20Coursera.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 840ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">🏥</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Privacy Law and HIPAA: Coursera</div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Secure%20Coding%2001-%20Safer%20Dependencies.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Secure Coding"
+          style="animation-delay: 880ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon coding">📦</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Secure Coding 01: Safer Dependencies</div>
+          <span class="cert-tag tag-coding">Secure Coding</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Secure%20Coding%2002-%20Sensitive%20Credentials.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Secure Coding"
+          style="animation-delay: 920ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon coding">🔑</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Secure Coding 02: Sensitive Credentials</div>
+          <span class="cert-tag tag-coding">Secure Coding</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Secure%20Coding%2003-%20Good%20Coding%20Practices.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Secure Coding"
+          style="animation-delay: 960ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon coding">✅</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Secure Coding 03: Good Coding Practices</div>
+          <span class="cert-tag tag-coding">Secure Coding</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Secure%20Coding%2004-%20OWASP%20Top%2010.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Secure Coding"
+          style="animation-delay: 1000ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon coding">🔟</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Secure Coding 04: OWASP Top 10</div>
+          <span class="cert-tag tag-coding">Secure Coding</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationDevelopment.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Secure Coding"
+          style="animation-delay: 1040ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon coding">💻</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">Secure Application Development</div>
+          <span class="cert-tag tag-coding">Secure Coding</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationDevelopmentDataHygiene.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Secure Coding"
+          style="animation-delay: 1080ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon coding">🧹</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">
+            Secure Application Development Data Hygiene
+          </div>
+          <span class="cert-tag tag-coding">Secure Coding</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationDevelopmentMemoryManagement.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Secure Coding"
+          style="animation-delay: 1120ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon coding">🧠</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">
+            Secure Application Development Memory Management
+          </div>
+          <span class="cert-tag tag-coding">Secure Coding</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationDevelopmentProtectingSourceCode.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Secure Coding"
+          style="animation-delay: 1160ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon coding">🛡️</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">
+            Secure Application Development Protecting Source Code
+          </div>
+          <span class="cert-tag tag-coding">Secure Coding</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationevelopmentPasswordHygiene.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Secure Coding"
+          style="animation-delay: 1200ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon coding">🔐</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">
+            Secure Applicationevelopment Password Hygiene
+          </div>
+          <span class="cert-tag tag-coding">Secure Coding</span>
+        </a>
+        <a
+          class="cert-card"
+          href="https://github.com/maskeynihal/certificates/blob/main/certificates/Security%20Snapshots%20-%20_Surprise%20Endings_%20(Insider%20Threat).pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-category="Security Awareness"
+          style="animation-delay: 1240ms"
+        >
+          <div class="cert-card-top">
+            <div class="cert-icon security">🔍</div>
+            <svg
+              class="cert-link-icon"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M7 17L17 7M7 7h10v10" />
+            </svg>
+          </div>
+          <div class="cert-name">
+            Security Snapshots: Surprise Endings (Insider Threat)
+          </div>
+          <span class="cert-tag tag-security">Security Awareness</span>
+        </a>
       </div>
-    </div>
+    </main>
 
-    <div class="cert-grid">
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/2026%20KnowBe4%20Security%20Awareness%20Training.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 0ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">🛡️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">2026 Know Be4 Security Awareness Training</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/AI%20Fundamentals%20-%20Coursera.pdf" target="_blank" rel="noopener noreferrer" data-category="Courses" style="animation-delay: 40ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon courses">🤖</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">AI Fundamentals: Coursera</div>
-  <span class="cert-tag tag-courses">Courses</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/AWS%20Partner%20Generative%20AI%20Essentials.pdf" target="_blank" rel="noopener noreferrer" data-category="AWS" style="animation-delay: 80ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon aws">☁️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">AWS Partner Generative AI Essentials</div>
-  <span class="cert-tag tag-aws">AWS</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/AWS%20Partner%20Generative%20AI%20Sales.pdf" target="_blank" rel="noopener noreferrer" data-category="AWS" style="animation-delay: 120ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon aws">☁️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">AWS Partner Generative AI Sales</div>
-  <span class="cert-tag tag-aws">AWS</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/AWS%20Partner%20Sales%20Accrediation.pdf" target="_blank" rel="noopener noreferrer" data-category="AWS" style="animation-delay: 160ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon aws">☁️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">AWS Partner Sales Accrediation</div>
-  <span class="cert-tag tag-aws">AWS</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/AWS%20SimuLearn-%20Cloud%20Computing%20Essentials.pdf" target="_blank" rel="noopener noreferrer" data-category="AWS" style="animation-delay: 200ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon aws">☁️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">AWS Simu Learn: Cloud Computing Essentials</div>
-  <span class="cert-tag tag-aws">AWS</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/CaptainAwarenessSecuringYourMobileDevices.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 240ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">📱</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Captain Awareness Securing Your Mobile Devices</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/CaptainAwarenessTravelSecurely.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 280ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">✈️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Captain Awareness Travel Securely</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Datadog_101_Developer.pdf" target="_blank" rel="noopener noreferrer" data-category="Courses" style="animation-delay: 320ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon courses">🐶</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Datadog 101 Developer</div>
-  <span class="cert-tag tag-courses">Courses</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/DataVisualization.pdf" target="_blank" rel="noopener noreferrer" data-category="Courses" style="animation-delay: 360ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon courses">📊</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Data Visualization</div>
-  <span class="cert-tag tag-courses">Courses</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/FundamentalsOfDatabaseEngineering.pdf" target="_blank" rel="noopener noreferrer" data-category="Courses" style="animation-delay: 400ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon courses">🗄️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Fundamentals Of Database Engineering</div>
-  <span class="cert-tag tag-courses">Courses</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Generative%20AI%20for%20Executives.pdf" target="_blank" rel="noopener noreferrer" data-category="Courses" style="animation-delay: 440ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon courses">🎓</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Generative AI for Executives</div>
-  <span class="cert-tag tag-courses">Courses</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/HCU_Certificate.pdf" target="_blank" rel="noopener noreferrer" data-category="Courses" style="animation-delay: 480ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon courses">🎓</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">HCU Certificate</div>
-  <span class="cert-tag tag-courses">Courses</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/HIPAA_Course_Certificate_NIHAL.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 520ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">🏥</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">HIPAA Course Certificate NIHAL</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/HIPAABusinessAssociates.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 560ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">🏥</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">HIPAABusiness Associates</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/InsiderThreat.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 600ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">🔍</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Insider Threat</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/InternetSecurityAndYou.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 640ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">🌐</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Internet Security And You</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Introduction%20to%20AI_LLM%20Security.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 680ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">🤖</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Introduction to AI LLM Security</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Introduction_to_Observability_Datadog.pdf" target="_blank" rel="noopener noreferrer" data-category="Courses" style="animation-delay: 720ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon courses">📈</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Introduction to Observability Datadog</div>
-  <span class="cert-tag tag-courses">Courses</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/JasperTheDisasterInTravelSecurityAwareness.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 760ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">✈️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Jasper The Disaster In Travel Security Awareness</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/PhsihingScams.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 800ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">🛡️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Phsihing Scams</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Privacy%20Law%20and%20HIPAA%20-%20Coursera.pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 840ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">🏥</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Privacy Law and HIPAA: Coursera</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Secure%20Coding%2001-%20Safer%20Dependencies.pdf" target="_blank" rel="noopener noreferrer" data-category="Secure Coding" style="animation-delay: 880ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon coding">📦</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Secure Coding 01: Safer Dependencies</div>
-  <span class="cert-tag tag-coding">Secure Coding</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Secure%20Coding%2002-%20Sensitive%20Credentials.pdf" target="_blank" rel="noopener noreferrer" data-category="Secure Coding" style="animation-delay: 920ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon coding">🔑</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Secure Coding 02: Sensitive Credentials</div>
-  <span class="cert-tag tag-coding">Secure Coding</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Secure%20Coding%2003-%20Good%20Coding%20Practices.pdf" target="_blank" rel="noopener noreferrer" data-category="Secure Coding" style="animation-delay: 960ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon coding">✅</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Secure Coding 03: Good Coding Practices</div>
-  <span class="cert-tag tag-coding">Secure Coding</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Secure%20Coding%2004-%20OWASP%20Top%2010.pdf" target="_blank" rel="noopener noreferrer" data-category="Secure Coding" style="animation-delay: 1000ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon coding">🔟</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Secure Coding 04: OWASP Top 10</div>
-  <span class="cert-tag tag-coding">Secure Coding</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationDevelopment.pdf" target="_blank" rel="noopener noreferrer" data-category="Secure Coding" style="animation-delay: 1040ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon coding">💻</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Secure Application Development</div>
-  <span class="cert-tag tag-coding">Secure Coding</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationDevelopmentDataHygiene.pdf" target="_blank" rel="noopener noreferrer" data-category="Secure Coding" style="animation-delay: 1080ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon coding">🧹</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Secure Application Development Data Hygiene</div>
-  <span class="cert-tag tag-coding">Secure Coding</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationDevelopmentMemoryManagement.pdf" target="_blank" rel="noopener noreferrer" data-category="Secure Coding" style="animation-delay: 1120ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon coding">🧠</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Secure Application Development Memory Management</div>
-  <span class="cert-tag tag-coding">Secure Coding</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationDevelopmentProtectingSourceCode.pdf" target="_blank" rel="noopener noreferrer" data-category="Secure Coding" style="animation-delay: 1160ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon coding">🛡️</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Secure Application Development Protecting Source Code</div>
-  <span class="cert-tag tag-coding">Secure Coding</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/SecureApplicationevelopmentPasswordHygiene.pdf" target="_blank" rel="noopener noreferrer" data-category="Secure Coding" style="animation-delay: 1200ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon coding">🔐</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Secure Applicationevelopment Password Hygiene</div>
-  <span class="cert-tag tag-coding">Secure Coding</span>
-</a>
-<a class="cert-card" href="https://github.com/maskeynihal/certificates/blob/main/certificates/Security%20Snapshots%20-%20_Surprise%20Endings_%20(Insider%20Threat).pdf" target="_blank" rel="noopener noreferrer" data-category="Security Awareness" style="animation-delay: 1240ms;">
-  <div class="cert-card-top">
-    <div class="cert-icon security">🔍</div>
-    <svg class="cert-link-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path d="M7 17L17 7M7 7h10v10"/>
-    </svg>
-  </div>
-  <div class="cert-name">Security Snapshots: Surprise Endings (Insider Threat)</div>
-  <span class="cert-tag tag-security">Security Awareness</span>
-</a>
-    </div>
-  </main>
-
-  <footer>
-    <p>© 2026 <a href="https://nihal.com.np/">Nihal Maskey</a> · All rights reserved</p>
-  </footer>
-</body>
+    <footer>
+      <p>
+        © 2026 <a href="https://nihal.com.np/">Nihal Maskey</a> · All rights
+        reserved
+      </p>
+    </footer>
+  </body>
 </html>
